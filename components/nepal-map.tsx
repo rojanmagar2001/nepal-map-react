@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useEffect } from "react";
 import {
   MapContainer,
@@ -131,7 +132,26 @@ const MapUpdater: React.FC<MapUpdaterProps> = ({ center, zoom }) => {
 
 const NepalMap: React.FC = () => {
   const [geoData, setGeoData] = useState<FeatureCollection | null>(null);
-  const [projects, setProjects] = useState<Project[]>([]);
+  const [projects, setProjects] = useState<Project[]>([
+    {
+      id: 1,
+      name: "Hydro Project A",
+      description: "Renewable energy",
+      district: "Kathmandu",
+      lat: 27.7172,
+      lng: 85.324,
+      type: "hydro",
+    },
+    {
+      id: 2,
+      name: "School Building",
+      description: "Education infrastructure",
+      district: "Gaighat",
+      lat: 26.796267,
+      lng: 86.5771548,
+      type: "education",
+    },
+  ]);
   const [selectedLayer, setSelectedLayer] = useState<LayerType>("districts");
   const [showAddProject, setShowAddProject] = useState<boolean>(false);
   const [newProject, setNewProject] = useState<NewProjectForm>({
@@ -146,30 +166,6 @@ const NepalMap: React.FC = () => {
     28.3949, 84.124,
   ]);
   const [mapZoom, setMapZoom] = useState<number>(7);
-
-  // Sample projects data
-  useEffect(() => {
-    setProjects([
-      {
-        id: 1,
-        name: "Hydro Project A",
-        description: "Renewable energy",
-        district: "Kathmandu",
-        lat: 27.7172,
-        lng: 85.324,
-        type: "hydro",
-      },
-      {
-        id: 2,
-        name: "School Building",
-        description: "Education infrastructure",
-        district: "Gaighat",
-        lat: 26.796267,
-        lng: 86.5771548,
-        type: "education",
-      },
-    ]);
-  }, []);
 
   // Load GeoJSON based on selected layer
   useEffect(() => {
@@ -232,7 +228,7 @@ const NepalMap: React.FC = () => {
         });
       },
       click: (e: L.LeafletMouseEvent) => {
-        const bounds = (e.target as L.Path).getBounds();
+        const bounds = (e.target as any).getBounds();
         setMapCenter([bounds.getCenter().lat, bounds.getCenter().lng]);
         setMapZoom(10);
       },
@@ -524,7 +520,7 @@ const NepalMap: React.FC = () => {
           </h2>
           {projects.length === 0 ? (
             <p className="text-gray-500 text-sm">
-              No projects added yet. Click "Add Project" to begin.
+              No projects added yet. Click &quot;Add Project&quot; to begin.
             </p>
           ) : (
             <div className="space-y-3">
