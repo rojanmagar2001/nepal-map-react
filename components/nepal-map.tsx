@@ -146,9 +146,9 @@ const NepalMap: React.FC = () => {
       id: 2,
       name: "School Building",
       description: "Education infrastructure",
-      district: "Gaighat",
-      lat: 26.796267,
-      lng: 86.5771548,
+      district: "Pokhara",
+      lat: 28.2096,
+      lng: 83.9856,
       type: "education",
     },
   ]);
@@ -165,7 +165,7 @@ const NepalMap: React.FC = () => {
   const [mapCenter, setMapCenter] = useState<LatLngExpression>([
     28.3949, 84.124,
   ]);
-  const [mapZoom, setMapZoom] = useState<number>(7);
+  const [mapZoom, setMapZoom] = useState<number>(7.5);
 
   // Load GeoJSON based on selected layer
   useEffect(() => {
@@ -185,6 +185,8 @@ const NepalMap: React.FC = () => {
           default:
             fileName = "nepal-with-districts-acesmndr.geojson";
         }
+
+        fileName = "nepal-with-provinces-acesmndr.geojson";
 
         // In your Next.js app, place the GeoJSON files in the public folder
         // and fetch them like this:
@@ -223,14 +225,9 @@ const NepalMap: React.FC = () => {
       mouseout: (e: L.LeafletMouseEvent) => {
         (e.target as L.Path).setStyle({
           weight: 2,
-          color: "#3388ff",
-          fillOpacity: 0.2,
+          color: "#2563eb",
+          fillOpacity: 0.6,
         });
-      },
-      click: (e: L.LeafletMouseEvent) => {
-        const bounds = (e.target as any).getBounds();
-        setMapCenter([bounds.getCenter().lat, bounds.getCenter().lng]);
-        setMapZoom(10);
       },
     });
   };
@@ -272,12 +269,12 @@ const NepalMap: React.FC = () => {
   return (
     <div className="w-full h-screen flex flex-col bg-gray-50">
       {/* Header */}
-      <div className="bg-white shadow-md p-4">
-        <h1 className="text-2xl font-bold text-gray-800 mb-4">
+      <div className="bg-white shadow-md p-2">
+        <h1 className="text-xl font-bold text-gray-800 mb-2">
           Nepal District Map - Project Locator
         </h1>
 
-        <div className="flex flex-wrap gap-4 items-center">
+        <div className="flex flex-wrap gap-2 items-center">
           {/* Layer Selection */}
           <div className="flex gap-2 items-center">
             <label className="text-sm font-medium text-gray-700">
@@ -297,13 +294,13 @@ const NepalMap: React.FC = () => {
           {/* Add Project Button */}
           <button
             onClick={() => setShowAddProject(!showAddProject)}
-            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+            className="px-3 py-1.5 bg-blue-600 text-white text-sm rounded-md hover:bg-blue-700 transition-colors"
           >
             {showAddProject ? "Cancel" : "+ Add Project"}
           </button>
 
           {/* Project Count */}
-          <div className="ml-auto text-sm text-gray-600">
+          <div className="ml-auto text-xs text-gray-600">
             Total Projects:{" "}
             <span className="font-semibold">{projects.length}</span>
           </div>
@@ -311,9 +308,11 @@ const NepalMap: React.FC = () => {
 
         {/* Add Project Form */}
         {showAddProject && (
-          <div className="mt-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
-            <h3 className="text-lg font-semibold mb-3">Add New Project</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div className="mt-2 p-3 bg-gray-50 rounded-lg border border-gray-200">
+            <h3 className="text-base font-semibold mb-2 text-gray-800">
+              Add New Project
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
               <input
                 type="text"
                 placeholder="Project Name"
@@ -321,7 +320,7 @@ const NepalMap: React.FC = () => {
                 onChange={(e) =>
                   setNewProject({ ...newProject, name: e.target.value })
                 }
-                className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="px-2 py-1.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder:text-gray-400 text-gray-800"
               />
               <input
                 type="text"
@@ -330,14 +329,14 @@ const NepalMap: React.FC = () => {
                 onChange={(e) =>
                   setNewProject({ ...newProject, district: e.target.value })
                 }
-                className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="px-2 py-1.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder:text-gray-400 text-gray-800"
               />
               <select
                 value={newProject.type}
                 onChange={(e) =>
                   setNewProject({ ...newProject, type: e.target.value as any })
                 }
-                className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="px-2 py-1.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder:text-gray-400 text-gray-800"
               >
                 <option value="hydro">⚡ Hydro Power</option>
                 <option value="education">🎓 Education</option>
@@ -356,7 +355,7 @@ const NepalMap: React.FC = () => {
                     lat: parseFloat(e.target.value),
                   })
                 }
-                className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="px-2 py-1.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder:text-gray-400 text-gray-800"
               />
               <input
                 type="number"
@@ -369,7 +368,7 @@ const NepalMap: React.FC = () => {
                     lng: parseFloat(e.target.value),
                   })
                 }
-                className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="px-2 py-1.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder:text-gray-400 text-gray-800"
               />
               <textarea
                 placeholder="Description"
@@ -377,13 +376,13 @@ const NepalMap: React.FC = () => {
                 onChange={(e) =>
                   setNewProject({ ...newProject, description: e.target.value })
                 }
-                className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 md:col-span-2"
+                className="px-2 py-1.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 md:col-span-2 placeholder:text-gray-400 text-gray-800"
                 rows={2}
               />
               <button
                 onClick={handleAddProject}
                 disabled={!newProject.name || !newProject.district}
-                className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed md:col-span-2"
+                className="px-3 py-1.5 text-sm bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed md:col-span-2"
               >
                 Add Project
               </button>
@@ -404,7 +403,7 @@ const NepalMap: React.FC = () => {
               [30.5, 88.3],
             ]}
             maxBoundsViscosity={1.0}
-            minZoom={7}
+            minZoom={7.5}
             maxZoom={13}
             style={{
               height: "100%",
@@ -514,23 +513,23 @@ const NepalMap: React.FC = () => {
         </div>
 
         {/* Sidebar - Project List */}
-        <div className="w-80 bg-white shadow-lg overflow-y-auto p-4">
-          <h2 className="text-xl font-bold mb-4 text-gray-800">
+        <div className="w-64 bg-white shadow-lg overflow-y-auto p-3">
+          <h2 className="text-lg font-bold mb-3 text-gray-800">
             Projects List
           </h2>
           {projects.length === 0 ? (
-            <p className="text-gray-500 text-sm">
+            <p className="text-gray-500 text-xs">
               No projects added yet. Click &quot;Add Project&quot; to begin.
             </p>
           ) : (
-            <div className="space-y-3">
+            <div className="space-y-2">
               {projects.map((project) => (
                 <div
                   key={project.id}
-                  className="p-3 border border-gray-200 rounded-lg hover:shadow-md transition-shadow cursor-pointer"
+                  className="p-2 border border-gray-200 rounded-lg hover:shadow-md transition-shadow cursor-pointer"
                   onClick={() => handleProjectClick(project)}
                 >
-                  <h3 className="font-semibold text-gray-800">
+                  <h3 className="font-semibold text-sm text-gray-800">
                     {project.name}
                   </h3>
                   <p className="text-xs text-gray-500 mt-1">
@@ -540,10 +539,10 @@ const NepalMap: React.FC = () => {
                     {project.type === "infrastructure" && "🏗️"}
                     {project.type === "other" && "📍"} {project.district}
                   </p>
-                  <p className="text-sm text-gray-600 mt-1">
+                  <p className="text-xs text-gray-600 mt-1">
                     {project.description}
                   </p>
-                  <div className="text-xs text-gray-400 mt-2">
+                  <div className="text-xs text-gray-400 mt-1">
                     Lat: {project.lat.toFixed(4)}, Lng: {project.lng.toFixed(4)}
                   </div>
                 </div>
